@@ -1,0 +1,317 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* --- MODEL VIEWER --- */
+model-viewer {
+    width: 100vw;
+    height: 70vh;
+    display: block;
+    margin: -4rem auto 0 auto;
+    border: none;
+    outline: none;
+    position: relative;
+    z-index: 1;
+    overflow-x: hidden;
+}
+
+/* --- TITULO EL IMPERIO EN UNA SOLA LINEA --- */
+.ei {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto 0 auto;
+    padding: 0 1.5rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    text-align: center;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+}
+
+.ei p {
+    margin: 0;
+    display: inline-block;
+    white-space: nowrap;
+    font-family: 'ITC Benguiat W01', 'Georgia', serif;
+    font-size: 5.8rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 4px;
+    color: #1c1202;
+    text-shadow:
+        -0.04rem -0.04rem 1px #f1c75b,
+         0.04rem -0.04rem 1px #f1c75b,
+        -0.04rem  0.04rem 1px #f1c75b,
+         0.04rem  0.04rem 1px #f1c75b,
+         0 0 10px #c69214,
+         0 0 20px #8c6500,
+         0 0 35px rgba(212, 175, 55, 0.45);
+}
+
+.ei-bound {
+    flex: 1;
+    max-width: 180px;
+    min-width: 60px;
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(to right, transparent, #d4af37, transparent);
+    box-shadow:
+        0 0 6px rgba(212, 175, 55, 0.9),
+        0 0 12px rgba(212, 175, 55, 0.55);
+}
+
+.ei-bound-left {
+    margin-right: 0.5rem;
+}
+
+.ei-bound-right {
+    margin-left: 0.5rem;
+}
+
+.ei-e,
+.ei-l,
+.ei-i,
+.ei-m,
+.ei-p,
+.ei-e2,
+.ei-r,
+.ei-i2,
+.ei-o {
+    display: inline-block;
+}
+
+.ei-space {
+    display: inline-block;
+    width: 0.6em;
+}
+
+/* --- OCULTA HIJOS MIENTRAS CARGA --- */
+:not(:defined) > * {
+    display: none;
+}
+
+/* --- BOTON AR --- */
+/* Oculto en computador */
+#ar-button {
+    display: none;
+    background-image: url(../img/btn.png);
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    background-position: 12px 50%;
+    background-color: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    bottom: 132px;
+    padding: 0 16px 0 40px;
+    font-family: Roboto, Helvetica Neue, sans-serif;
+    font-size: 14px;
+    color: #4285f4;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 18px;
+    border: 1px solid #DADCE0;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#ar-button:active {
+    background-color: #E8EAED;
+}
+
+#ar-button:focus {
+    outline: none;
+}
+
+#ar-button:focus-visible {
+    outline: 1px solid #4285f4;
+}
+
+/* --- ANIMACIONES --- */
+@keyframes circle {
+    from {
+        transform: translateX(-50%) rotate(0deg) translateX(50px) rotate(0deg);
+    }
+    to {
+        transform: translateX(-50%) rotate(360deg) translateX(50px) rotate(-360deg);
+    }
+}
+
+@keyframes elongate {
+    from {
+        transform: translateX(100px);
+    }
+    to {
+        transform: translateX(-100px);
+    }
+}
+
+/* --- PROMPT AR --- */
+model-viewer > #ar-prompt {
+    position: absolute;
+    left: 50%;
+    bottom: 175px;
+    animation: elongate 2s infinite ease-in-out alternate;
+    display: none;
+}
+
+model-viewer[ar-status="session-started"] > #ar-prompt {
+    display: block;
+}
+
+model-viewer > #ar-prompt > img {
+    animation: circle 4s linear infinite;
+}
+
+/* --- ERROR AR --- */
+model-viewer > #ar-failure {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 175px;
+    display: none;
+}
+
+model-viewer[ar-tracking="not-tracking"] > #ar-failure {
+    display: block;
+}
+
+/* --- SLIDER --- */
+.slider {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    position: absolute;
+    bottom: 16px;
+}
+
+.slides {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.slide {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #fff;
+    margin-right: 10px;
+    border-radius: 10px;
+    border: none;
+    display: flex;
+    cursor: pointer;
+}
+
+.slide.selected {
+    border: 2px solid #4285f4;
+}
+
+.slide:focus {
+    outline: none;
+}
+
+.slide:focus-visible {
+    outline: 1px solid #4285f4;
+}
+
+/* --- TABLET --- */
+@media (max-width: 992px) {
+    .ei {
+        gap: 18px;
+    }
+
+    .ei p {
+        font-size: 4.5rem;
+        letter-spacing: 3px;
+    }
+
+    .ei-bound {
+        max-width: 120px;
+    }
+
+    model-viewer {
+        height: 65vh;
+        margin-top: -3rem;
+    }
+}
+
+/* --- MOVIL --- */
+@media (max-width: 768px) {
+    .ei {
+        gap: 12px;
+        margin-top: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    .ei p {
+        font-size: 3rem;
+        letter-spacing: 2px;
+    }
+
+    .ei-bound {
+        max-width: 70px;
+        min-width: 30px;
+        height: 3px;
+    }
+
+    model-viewer {
+        height: 58vh;
+        margin-top: -2rem;
+    }
+
+    /* Boton AR visible solo en movil */
+    #ar-button {
+        display: block;
+        bottom: 110px;
+        font-size: 13px;
+    }
+
+    model-viewer > #ar-prompt,
+    model-viewer > #ar-failure {
+        bottom: 155px;
+    }
+}
+
+/* --- MOVIL PEQUENO --- */
+@media (max-width: 480px) {
+    .ei {
+        gap: 8px;
+    }
+
+    .ei p {
+        font-size: 2.2rem;
+        letter-spacing: 1px;
+    }
+
+    .ei-bound {
+        max-width: 40px;
+        min-width: 20px;
+    }
+
+    model-viewer {
+        height: 52vh;
+        margin-top: -1rem;
+    }
+
+    #ar-button {
+        bottom: 95px;
+        font-size: 12px;
+        padding: 0 14px 0 38px;
+    }
+}

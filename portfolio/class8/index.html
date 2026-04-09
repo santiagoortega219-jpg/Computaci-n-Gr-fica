@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Modeling</title>
+    <link rel="stylesheet" href="./src/css/main.css">
+    <!-- Import the component -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.2.0/model-viewer.min.js"></script>
+</head>
+
+<body>
+
+    <div class="st">
+
+        <div class="st-top">
+            <div class="st-bound st-bound-full"></div>
+            <p><span class="st-drop st-stranger-s">S</span><span class="st-stranger-t">t</span><span
+                    class="st-stranger-r">r</span><span class="st-stranger-a">a</span><span
+                    class="st-stranger-n">n</span><span class="st-stranger-g">g</span><span
+                    class="st-stranger-e">e</span><span class="st-drop st-stranger-r-2">r</span>
+            </p>
+            <div class="st-bound st-bound-mini st-bound-left"></div>
+            <div class="st-bound st-bound-mini st-bound-right"></div>
+        </div>
+
+        <div class="st-bottom">
+            <p><span class="st-things-t">T</span><span class="st-things-h">h</span><span
+                    class="st-things-i">i</span><span class="st-things-n">n</span><span
+                    class="st-things-g">g</span><span class="st-things-s">s</span></p>
+        </div>
+
+    </div>
+
+    <!-- Use it like any other HTML element -->
+    <model-viewer alt="Scene 3d" src="./src/models/glb/scene.glb" shadow-intensity="1" ar camera-controls
+        touch-action="pan-y">
+
+        <button slot="ar-button" id="ar-button">
+            View in your space
+        </button>
+
+        <div id="ar-prompt">
+            <img src="./src/img/hand.png">
+        </div>
+
+        <button id="ar-failure">
+            AR is not tracking!
+        </button>
+
+        <div class="slider">
+            <div class="slides">
+                <button class="slide selected" onclick="switchSrc(this, 'lamp')"
+                    style="background-image: url('./src/img/lamp.png');">
+                </button>
+                <button class="slide" onclick="switchSrc(this, 'once')"
+                    style="background-image: url('./src/img/once.png');">
+                </button>
+                <button class="slide" onclick="switchSrc(this, 'scene')"
+                    style="background-image: url('./src/img/scene.png');">
+                </button>
+            </div>
+        </div>
+    </model-viewer>
+
+    <script type="module">
+        const modelViewer = document.querySelector("model-viewer");
+
+        window.switchSrc = (element, name) => {
+            const base = "./src/models/glb/" + name;
+            modelViewer.src = base + '.glb';
+            const slides = document.querySelectorAll(".slide");
+            slides.forEach((element) => { element.classList.remove("selected"); });
+            element.classList.add("selected");
+        };
+
+        document.querySelector(".slider").addEventListener('beforexrselect', (ev) => {
+            // Keep slider interactions from affecting the XR scene.
+            ev.preventDefault();
+        });
+    </script>
+
+</body>
+
+</html>
