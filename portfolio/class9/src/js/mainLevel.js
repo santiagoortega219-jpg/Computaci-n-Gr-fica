@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import Stats from 'three/addons/libs/stats.module.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
@@ -56,11 +55,6 @@ ground.rotation.x = -Math.PI / 2;
 ground.position.y = -2.5;
 scene.add(ground);
 
-const stats = new Stats();
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.top = '0px';
-document.body.appendChild(stats.domElement);
-
 let castleModel = null;
 let modelCenter = new THREE.Vector3();
 let modelSize = new THREE.Vector3();
@@ -71,7 +65,6 @@ let baseCameraZ = 18;
 function fitCameraToObject(object) {
   const box = new THREE.Box3().setFromObject(object);
   const center = box.getCenter(new THREE.Vector3());
-  const size = box.getSize(new THREE.Vector3());
 
   object.position.x -= center.x;
   object.position.y -= box.min.y;
@@ -112,6 +105,9 @@ async function loadScene() {
     const gltf = await loader.loadAsync('../src/models/glb/castillo.glb');
     castleModel = gltf.scene;
 
+    // GIRO DEL MODELO DE FRENTE
+    castleModel.rotation.y = Math.PI;
+
     castleModel.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = false;
@@ -125,7 +121,6 @@ async function loadScene() {
     });
 
     scene.add(castleModel);
-
     fitCameraToObject(castleModel);
 
   } catch (error) {
@@ -137,7 +132,6 @@ loadScene();
 
 function animate() {
   timer.update();
-  stats.update();
 
   const t = performance.now() * 0.0003;
 
