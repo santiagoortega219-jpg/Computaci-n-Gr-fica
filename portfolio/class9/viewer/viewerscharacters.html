@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imperio - Characters</title>
+    <link rel="icon" type="image/jpg" href="../src/img/icon.jpg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            font-family: 'Cinzel', serif;
+            color: #f4e3b2;
+        }
+
+        body.imperio-bg {
+            background:
+                radial-gradient(circle at 80% 14%, rgba(255, 215, 120, 0.20) 0%, rgba(255, 215, 120, 0.06) 10%, transparent 20%),
+                radial-gradient(circle at 50% 0%, rgba(150, 20, 20, 0.22) 0%, transparent 30%),
+                linear-gradient(180deg, #050505 0%, #120909 28%, #24100d 56%, #120909 78%, #050505 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body.imperio-bg::before {
+            content: "";
+            position: fixed;
+            top: 60px;
+            right: 100px;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,238,185,0.96) 0%, rgba(235,195,95,0.90) 35%, rgba(212,160,55,0.40) 60%, rgba(0,0,0,0) 100%);
+            box-shadow: 0 0 40px rgba(255,205,100,0.25);
+            z-index: 0;
+        }
+
+        body.imperio-bg::after {
+            content: "";
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 40vh;
+            background: rgba(10, 8, 8, 0.96);
+            clip-path: polygon(
+                0% 100%,
+                0% 65%,
+                8% 50%,
+                16% 70%,
+                26% 44%,
+                36% 68%,
+                47% 38%,
+                58% 72%,
+                70% 48%,
+                82% 74%,
+                92% 56%,
+                100% 68%,
+                100% 100%
+            );
+            z-index: 0;
+        }
+
+        .screen-container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 32px;
+            position: relative;
+            z-index: 2;
+            border: 3px solid rgba(214, 169, 62, 0.88);
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(28, 14, 10, 0.93), rgba(72, 18, 18, 0.82));
+            box-shadow:
+                0 0 25px rgba(255, 193, 76, 0.12),
+                0 0 45px rgba(120, 10, 10, 0.22),
+                inset 0 0 24px rgba(255, 220, 120, 0.04);
+            backdrop-filter: blur(4px);
+        }
+
+        .screen-container::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(255, 223, 136, 0.20);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .screen-header {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .screen-header h1 {
+            margin: 0;
+            font-size: 3.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #efcf72;
+            text-shadow: 0 0 8px rgba(255, 221, 120, 0.16), 0 0 18px rgba(140, 20, 20, 0.35), 2px 2px 0 #2a140c;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            color: #f0ddb0;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(260px, 1fr));
+            gap: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .character-card {
+            background: linear-gradient(180deg, rgba(90, 20, 20, 0.88), rgba(34, 15, 10, 0.95));
+            border: 2px solid rgba(214, 169, 62, 0.45);
+            border-radius: 16px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: inset 0 0 16px rgba(255, 219, 127, 0.04), 0 0 10px rgba(120, 10, 10, 0.10);
+            transition: transform 0.25s ease, border 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .character-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 223, 136, 0.90);
+            box-shadow: 0 0 18px rgba(255, 194, 78, 0.16), 0 0 26px rgba(140, 12, 12, 0.18);
+        }
+
+        .character-card.active {
+            border-color: #f3d57a;
+            box-shadow:
+                0 0 20px rgba(255, 210, 100, 0.30),
+                inset 0 0 16px rgba(255, 220, 120, 0.10);
+            transform: translateY(-4px);
+        }
+
+        .character-badge {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 15px auto;
+            border-radius: 50%;
+            border: 2px solid rgba(214, 169, 62, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #efcf72;
+            font-weight: 800;
+            background: rgba(25, 12, 8, 0.9);
+        }
+
+        .character-card h2 {
+            margin: 0;
+            font-size: 1.7rem;
+            color: #f4deb0;
+        }
+
+        .character-class {
+            margin: 8px 0 12px 0;
+            color: #d8b768;
+        }
+
+        .character-desc {
+            min-height: 85px;
+            line-height: 1.6;
+            color: #f4e8cb;
+        }
+
+        .character-card button,
+        .secondary-btn {
+            padding: 12px 22px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 223, 136, 0.45);
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .character-card button {
+            background: linear-gradient(180deg, #d6a93e, #8b6315);
+            color: #1a1006;
+        }
+
+        .character-card button.selected {
+            background: linear-gradient(180deg, #f3d57a, #b8871e);
+        }
+
+        .bottom-actions {
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .secondary-btn {
+            background: linear-gradient(180deg, rgba(110, 24, 24, 0.95), rgba(55, 10, 10, 0.98));
+            color: #f4e3b2;
+        }
+
+        .saved-text {
+            text-align: center;
+            margin-top: 18px;
+            color: #f3d57a;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 900px) {
+            .characters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .screen-header h1 {
+                font-size: 2.4rem;
+                letter-spacing: 3px;
+            }
+
+            .screen-container {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="imperio-bg">
+    <div class="screen-container">
+        <div class="screen-header">
+            <h1>Imperio</h1>
+            <p class="subtitle">Choose your warrior</p>
+        </div>
+
+        <div class="characters-grid">
+            <div class="character-card" data-character="Kael">
+                <div class="character-badge">I</div>
+                <h2>Kael</h2>
+                <p class="character-class">Royal Guardian</p>
+                <p class="character-desc">Guerrero del reino central. Especialista en espada, defensa pesada y combate de frente.</p>
+                <button onclick="selectCharacter('Kael')">Select</button>
+            </div>
+
+            <div class="character-card" data-character="Lira">
+                <div class="character-badge">II</div>
+                <h2>Lira</h2>
+                <p class="character-class">Imperial Archer</p>
+                <p class="character-desc">Arquera de élite, rápida y silenciosa. Domina ataques a distancia con gran precisión.</p>
+                <button onclick="selectCharacter('Lira')">Select</button>
+            </div>
+
+            <div class="character-card" data-character="Draxor">
+                <div class="character-badge">III</div>
+                <h2>Draxor</h2>
+                <p class="character-class">Dark Berserker</p>
+                <p class="character-desc">Bárbaro oscuro del norte. Ataque brutal, alta resistencia y enorme fuerza en batalla.</p>
+                <button onclick="selectCharacter('Draxor')">Select</button>
+            </div>
+
+            <div class="character-card" data-character="Nyra">
+                <div class="character-badge">IV</div>
+                <h2>Nyra</h2>
+                <p class="character-class">Fire Sorceress</p>
+                <p class="character-desc">Hechicera imperial con dominio del fuego, magia ofensiva y escudos de protección.</p>
+                <button onclick="selectCharacter('Nyra')">Select</button>
+            </div>
+        </div>
+
+        <p class="saved-text" id="savedCharacterText"></p>
+
+        <div class="bottom-actions">
+            <button class="secondary-btn" onclick="goBack()">Back to Menu</button>
+        </div>
+    </div>
+
+    <script>
+        function selectCharacter(name) {
+            localStorage.setItem("imperioCharacter", name);
+            updateSelectedCharacter();
+        }
+
+        function updateSelectedCharacter() {
+            const savedCharacter = localStorage.getItem("imperioCharacter");
+            const cards = document.querySelectorAll(".character-card");
+            const buttons = document.querySelectorAll(".character-card button");
+            const text = document.getElementById("savedCharacterText");
+
+            cards.forEach(card => card.classList.remove("active"));
+            buttons.forEach(btn => {
+                btn.classList.remove("selected");
+                btn.textContent = "Select";
+            });
+
+            if (savedCharacter) {
+                const activeCard = document.querySelector(`.character-card[data-character="${savedCharacter}"]`);
+                if (activeCard) {
+                    activeCard.classList.add("active");
+                    const btn = activeCard.querySelector("button");
+                    btn.classList.add("selected");
+                    btn.textContent = "Selected";
+                }
+                text.textContent = "Saved character: " + savedCharacter;
+            } else {
+                text.textContent = "No character selected";
+            }
+        }
+
+        function goBack() {
+            window.location.href = "../index.html";
+        }
+
+        window.addEventListener("load", updateSelectedCharacter);
+    </script>
+</body>
+</html>
