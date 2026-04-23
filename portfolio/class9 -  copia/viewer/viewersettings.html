@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imperio - Settings</title>
+    <link rel="icon" type="image/jpg" href="../src/img/icon.jpg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            font-family: 'Cinzel', serif;
+            color: #f4e3b2;
+        }
+
+        body.imperio-bg {
+            background:
+                radial-gradient(circle at 80% 14%, rgba(255, 215, 120, 0.20) 0%, rgba(255, 215, 120, 0.06) 10%, transparent 20%),
+                radial-gradient(circle at 50% 0%, rgba(150, 20, 20, 0.22) 0%, transparent 30%),
+                linear-gradient(180deg, #050505 0%, #120909 28%, #24100d 56%, #120909 78%, #050505 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body.imperio-bg::before {
+            content: "";
+            position: fixed;
+            top: 60px;
+            right: 100px;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,238,185,0.96) 0%, rgba(235,195,95,0.90) 35%, rgba(212,160,55,0.40) 60%, rgba(0,0,0,0) 100%);
+            box-shadow: 0 0 40px rgba(255,205,100,0.25);
+            z-index: 0;
+        }
+
+        body.imperio-bg::after {
+            content: "";
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 40vh;
+            background: rgba(10, 8, 8, 0.96);
+            clip-path: polygon(
+                0% 100%,
+                0% 65%,
+                8% 50%,
+                16% 70%,
+                26% 44%,
+                36% 68%,
+                47% 38%,
+                58% 72%,
+                70% 48%,
+                82% 74%,
+                92% 56%,
+                100% 68%,
+                100% 100%
+            );
+            z-index: 0;
+        }
+
+        .screen-container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 32px;
+            position: relative;
+            z-index: 2;
+            border: 3px solid rgba(214, 169, 62, 0.88);
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(28, 14, 10, 0.93), rgba(72, 18, 18, 0.82));
+            box-shadow:
+                0 0 25px rgba(255, 193, 76, 0.12),
+                0 0 45px rgba(120, 10, 10, 0.22),
+                inset 0 0 24px rgba(255, 220, 120, 0.04);
+            backdrop-filter: blur(4px);
+        }
+
+        .screen-container::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(255, 223, 136, 0.20);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .screen-header {
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .screen-header h1 {
+            margin: 0;
+            font-size: 3.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: #efcf72;
+            text-shadow: 0 0 8px rgba(255, 221, 120, 0.16), 0 0 18px rgba(140, 20, 20, 0.35), 2px 2px 0 #2a140c;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            color: #f0ddb0;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(280px, 1fr));
+            gap: 22px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .setting-box {
+            background: linear-gradient(180deg, rgba(90, 20, 20, 0.88), rgba(34, 15, 10, 0.95));
+            border: 2px solid rgba(214, 169, 62, 0.45);
+            border-radius: 16px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .setting-box label {
+            color: #f0d78a;
+            font-weight: 600;
+        }
+
+        .setting-box input[type="range"],
+        .setting-box select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(214, 169, 62, 0.35);
+            background: rgba(15, 10, 10, 0.95);
+            color: #f4e3b2;
+            font-family: 'Cinzel', serif;
+        }
+
+        .setting-box input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            accent-color: #d6a93e;
+        }
+
+        .check-row {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bottom-actions {
+            margin-top: 32px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            padding: 12px 22px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 223, 136, 0.45);
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .primary-btn {
+            background: linear-gradient(180deg, #d6a93e, #8b6315);
+            color: #1a1006;
+        }
+
+        .secondary-btn {
+            background: linear-gradient(180deg, rgba(110, 24, 24, 0.95), rgba(55, 10, 10, 0.98));
+            color: #f4e3b2;
+        }
+
+        .saved-text {
+            text-align: center;
+            margin-top: 18px;
+            color: #f3d57a;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 900px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .screen-header h1 {
+                font-size: 2.4rem;
+                letter-spacing: 3px;
+            }
+
+            .screen-container {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="imperio-bg">
+    <div class="screen-container">
+        <div class="screen-header">
+            <h1>Imperio</h1>
+            <p class="subtitle">Game Settings</p>
+        </div>
+
+        <div class="settings-grid">
+            <div class="setting-box">
+                <label for="musicVolume">Music Volume</label>
+                <input type="range" id="musicVolume" min="0" max="100" value="70">
+            </div>
+
+            <div class="setting-box">
+                <label for="effectsVolume">Effects Volume</label>
+                <input type="range" id="effectsVolume" min="0" max="100" value="80">
+            </div>
+
+            <div class="setting-box">
+                <label for="difficulty">Difficulty</label>
+                <select id="difficulty">
+                    <option value="Easy">Easy</option>
+                    <option value="Normal" selected>Normal</option>
+                    <option value="Hard">Hard</option>
+                    <option value="Legend">Legend</option>
+                </select>
+            </div>
+
+            <div class="setting-box">
+                <label for="graphics">Graphics Quality</label>
+                <select id="graphics">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High" selected>High</option>
+                    <option value="Ultra">Ultra</option>
+                </select>
+            </div>
+
+            <div class="setting-box">
+                <label for="language">Language</label>
+                <select id="language">
+                    <option value="Spanish" selected>Spanish</option>
+                    <option value="English">English</option>
+                </select>
+            </div>
+
+            <div class="setting-box check-row">
+                <label for="fullscreen">Fullscreen</label>
+                <input type="checkbox" id="fullscreen">
+            </div>
+
+            <div class="setting-box check-row">
+                <label for="subtitles">Subtitles</label>
+                <input type="checkbox" id="subtitles" checked>
+            </div>
+
+            <div class="setting-box check-row">
+                <label for="shadows">Shadows</label>
+                <input type="checkbox" id="shadows" checked>
+            </div>
+        </div>
+
+        <p class="saved-text" id="savedSettingsText"></p>
+
+        <div class="bottom-actions">
+            <button class="primary-btn" onclick="saveSettings()">Save Settings</button>
+            <button class="secondary-btn" onclick="goBack()">Back to Menu</button>
+        </div>
+    </div>
+
+    <script>
+        function saveSettings() {
+            const settings = {
+                musicVolume: document.getElementById("musicVolume").value,
+                effectsVolume: document.getElementById("effectsVolume").value,
+                difficulty: document.getElementById("difficulty").value,
+                graphics: document.getElementById("graphics").value,
+                language: document.getElementById("language").value,
+                fullscreen: document.getElementById("fullscreen").checked,
+                subtitles: document.getElementById("subtitles").checked,
+                shadows: document.getElementById("shadows").checked
+            };
+
+            localStorage.setItem("imperioSettings", JSON.stringify(settings));
+            updateSavedText();
+            alert("Settings saved successfully");
+        }
+
+        function updateSavedText() {
+            const saved = JSON.parse(localStorage.getItem("imperioSettings"));
+            const text = document.getElementById("savedSettingsText");
+
+            if (saved) {
+                text.textContent =
+                    "Saved: Difficulty " + saved.difficulty +
+                    " | Graphics " + saved.graphics +
+                    " | Language " + saved.language;
+            } else {
+                text.textContent = "No settings saved";
+            }
+        }
+
+        function loadSettings() {
+            const saved = JSON.parse(localStorage.getItem("imperioSettings"));
+
+            if (saved) {
+                document.getElementById("musicVolume").value = saved.musicVolume;
+                document.getElementById("effectsVolume").value = saved.effectsVolume;
+                document.getElementById("difficulty").value = saved.difficulty;
+                document.getElementById("graphics").value = saved.graphics;
+                document.getElementById("language").value = saved.language;
+                document.getElementById("fullscreen").checked = saved.fullscreen;
+                document.getElementById("subtitles").checked = saved.subtitles;
+                document.getElementById("shadows").checked = saved.shadows;
+            }
+
+            updateSavedText();
+        }
+
+        function goBack() {
+            window.location.href = "../index.html";
+        }
+
+        window.addEventListener("load", loadSettings);
+    </script>
+</body>
+</html>

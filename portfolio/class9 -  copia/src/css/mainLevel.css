@@ -1,0 +1,49 @@
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #1b0f0f;
+    font-family: Arial, sans-serif;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#info-panel {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    width: 280px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(20, 10, 8, 0.82);
+    border: 1px solid rgba(214, 169, 62, 0.55);
+    color: #f3dfaa;
+    z-index: 998;
+    box-shadow: 0 0 18px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+#info-panel h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #efcf72;
+}
+
+#info-panel p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: #f8ebc2;
+}
