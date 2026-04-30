@@ -27,7 +27,7 @@ function ScreenOverlay(controls, controlsEnabled) {
 			instructions.style.display = '';
 
 		}
-
+		
 	}
 
 	var pointerlockerror = function ( event ) {
