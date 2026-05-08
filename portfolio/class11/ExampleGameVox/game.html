@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voxel World FPS - Three.js</title>
+    <link rel="stylesheet" href="./game.css">
+</head>
+<body>
+<body>
+
+    <div id="blocker">
+        <div id="instructions">
+            <h1 style="margin: 0 0 10px 0;">VOXEL CHART GENERATOR</h1>
+            <p style="font-size: 1.2em;">Haz clic para entrar al mundo</p>
+            <p>(<b>W, A, S, D</b> para caminar | <b>MOUSE</b> para mirar | <b>ESC</b> para salir)</p>
+        </div>
+    </div>
+
+    <div id="crosshair"></div>
+
+    <div id="info-panel">
+        <strong>Control:</strong> PointerLockControls<br>
+        <strong>Mapa:</strong> Voxels Aleatorios (32x32)<br>
+        <strong>Altura:</strong> 1.7m (Ojos del jugador)
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/examples/jsm/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="./game.js"></script>
+</body>
+</html>

@@ -7,17 +7,20 @@ body {
     position: absolute;
     bottom: 30px;
     width: 300px;
-    color: white;
-    background: rgb(0, 0, 0, 0.5);
+    color: #fff7dc;
+    background: rgba(70, 45, 15, 0.35);
     padding: 20px;
     border-radius: 0 10px 10px 0;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(214, 169, 62, 0.45);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
     pointer-events: none;
 }
 
 #info-panel h3 {
     margin: 0 0 10px 0;
     font-size: 18px;
+    color: #ffd76a;
 }
 
 #info-panel .control.title {
@@ -29,4 +32,30 @@ body {
 #info-panel .control-desc {
     font-size: 14px;
     line-height: 1.4;
+}
+
+#instructions {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    color: #fff7dc;
+    background: rgba(70, 45, 15, 0.35);
+    padding: 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(214, 169, 62, 0.45);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    text-align: center;
+    display: none; /* Se muestra solo en modo PointerLock */
+}
+
+#instructions h2 {
+    color: #ffd76a;
+    margin-top: 0;
+}
+
+#instructions p {
+    color: #fff7dc;
 }

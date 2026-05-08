@@ -21,29 +21,37 @@ canvas {
 
 #info-panel {
     position: fixed;
-    right: 20px;
-    bottom: 20px;
-    width: 280px;
-    padding: 14px 16px;
-    border-radius: 14px;
-    background: rgba(20, 10, 8, 0.82);
-    border: 1px solid rgba(214, 169, 62, 0.55);
-    color: #f3dfaa;
+
+    left: 50%;
+    bottom: 45px;
+    transform: translateX(-50%);
+
+    width: 320px;
+    padding: 14px 18px;
+    border-radius: 16px;
+
+    background: rgba(90, 65, 25, 0.55);
+    border: 1px solid rgba(239, 207, 114, 0.75);
+
+    color: #fff2c4;
     z-index: 998;
-    box-shadow: 0 0 18px rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    text-align: center;
 }
 
 #info-panel h3 {
     margin: 0 0 8px 0;
     font-size: 18px;
-    color: #efcf72;
+    color: #ffe08a;
 }
 
 #info-panel p {
     margin: 0;
     font-size: 14px;
     line-height: 1.45;
-    color: #f8ebc2;
+    color: #fff4cf;
 }

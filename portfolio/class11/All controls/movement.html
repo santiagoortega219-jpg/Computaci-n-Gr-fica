@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js Controls Masterclass</title>
+    <link rel="stylesheet" href="./movement.css">
+</head>
+<body>
+   <div id="instructions">
+        <h2>Modo PointerLock Activo</h2>
+        <p>El mouse ha sido capturado por el navegador.</p>
+        <p><b>W, A, S, D</b> para caminar<br><b>ESC</b> para liberar el mouse</p>
+    </div>
+
+    <div id="info-panel">
+        <h3 id="control-title">OrbitControls</h3>
+        <p id="control-desc">Cargando descripción...</p>
+    </div>  <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/examples/jsm/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "lil-gui": "https://unpkg.com/lil-gui@0.19.1/dist/lil-gui.esm.js"
+            }
+        }
+    </script>
+
+    <script type="module" src="./movement.js"></script>
+</body>
+</html>

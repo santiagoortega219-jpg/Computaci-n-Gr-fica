@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Three.js FPS Minimalista</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        canvas { display: block; }
+        
+        /* Interfaces */
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; background: rgba(0,0,0,0.8); color: white;
+            z-index: 10;
+        }
+        .hidden { display: none; }
+        button {
+            padding: 15px 30px; font-size: 20px; cursor: pointer;
+            background: #27ae60; color: white; border: none; border-radius: 5px;
+        }
+        #crosshair {
+            position: absolute; top: 50%; left: 50%;
+            width: 20px; height: 20px; border: 2px solid white;
+            border-radius: 50%; transform: translate(-50%, -50%);
+            pointer-events: none; z-index: 5;
+        }
+        #hud {
+            position: absolute; bottom: 20px; left: 20px;
+            color: white; font-size: 24px; z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="crosshair"></div>
+    <div id="hud">Enemigos restantes: <span id="count">0</span></div>
+
+    <div id="screen-start" class="overlay">
+        <h1>SURVIVAL FPS</h1>
+        <p>Usa WASD para moverte y Click para disparar.</p>
+        <button onclick="startGame()">JUGAR</button>
+    </div>
+
+    <div id="screen-win" class="overlay hidden">
+        <h1 style="color: #f1c40f;">¡VICTORIA!</h1>
+        <button onclick="location.reload()">REINTENTAR</button>
+    </div>
+
+    <div id="screen-lose" class="overlay hidden">
+        <h1 style="color: #e74c3c;">HAS MUERTO</h1>
+        <button onclick="location.reload()">REINTENTAR</button>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+
+        // --- Configuración Global ---
+        let scene, camera, renderer, controls;
+        let bullets = [], enemies = [];
+        let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false;
+        const velocity = new THREE.Vector3();
+        const direction = new THREE.Vector3();
+        let prevTime = performance.now();
+        let gameActive = false;
+
+        init();
+        animate();
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x111122);
+            scene.fog = new THREE.Fog(0x111122, 0, 50);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.y = 1.6; // Altura promedio humana
+
+            const light = new THREE.HemisphereLight(0xeeeeff, 0x444422, 1.5);
+            scene.add(light);
+
+            // Suelo
+            const floor = new THREE.Mesh(
+                new THREE.PlaneGeometry(100, 100),
+                new THREE.MeshStandardMaterial({ color: 0x222222 })
+            );
+            floor.rotation.x = -Math.PI / 2;
+            scene.add(floor);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            controls = new PointerLockControls(camera, document.body);
+
+            // Eventos de teclado
+            const onKeyDown = (e) => {
+                switch (e.code) {
+                    case 'KeyW': moveForward = true; break;
+                    case 'KeyS': moveBackward = true; break;
+                    case 'KeyA': moveLeft = true; break;
+                    case 'KeyD': moveRight = true; break;
+                }
+            };
+            const onKeyUp = (e) => {
+                switch (e.code) {
+                    case 'KeyW': moveForward = false; break;
+                    case 'KeyS': moveBackward = false; break;
+                    case 'KeyA': moveLeft = false; break;
+                    case 'KeyD': moveRight = false; break;
+                }
+            };
+            document.addEventListener('keydown', onKeyDown);
+            document.addEventListener('keyup', onKeyUp);
+            document.addEventListener('mousedown', shoot);
+
+            // Crear Enemigos
+            for(let i=0; i<5; i++) spawnEnemy();
+            updateHUD();
+        }
+
+        function spawnEnemy() {
+            const geo = new THREE.BoxGeometry(1, 2, 1);
+            const mat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+            const enemy = new THREE.Mesh(geo, mat);
+            enemy.position.set(Math.random()*40-20, 1, Math.random()*40-20);
+            scene.add(enemy);
+            enemies.push(enemy);
+        }
+
+        function shoot() {
+            if (!controls.isLocked || !gameActive) return;
+
+            const bullet = new THREE.Mesh(
+                new THREE.SphereGeometry(0.1),
+                new THREE.MeshBasicMaterial({ color: 0xffff00 })
+            );
+            bullet.position.copy(camera.position);
+            
+            const dir = new THREE.Vector3();
+            camera.getWorldDirection(dir);
+            bullet.userData.velocity = dir.multiplyScalar(0.8);
+            
+            scene.add(bullet);
+            bullets.push(bullet);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = performance.now();
+
+            if (controls.isLocked && gameActive) {
+                const delta = (time - prevTime) / 1000;
+
+                // Movimiento Proporcional
+                velocity.x -= velocity.x * 10.0 * delta;
+                velocity.z -= velocity.z * 10.0 * delta;
+
+                direction.z = Number(moveForward) - Number(moveBackward);
+                direction.x = Number(moveRight) - Number(moveLeft);
+                direction.normalize();
+
+                if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta;
+                if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta;
+
+                controls.moveRight(-velocity.x * delta);
+                controls.moveForward(-velocity.z * delta);
+
+                // Lógica de Balas y Colisión Simple
+                bullets.forEach((b, bIdx) => {
+                    b.position.add(b.userData.velocity);
+                    
+                    enemies.forEach((e, eIdx) => {
+                        if (b.position.distanceTo(e.position) < 1) {
+                            scene.remove(e);
+                            enemies.splice(eIdx, 1);
+                            scene.remove(b);
+                            bullets.splice(bIdx, 1);
+                            updateHUD();
+                            checkWin();
+                        }
+                    });
+
+                    if(b.position.length() > 100) {
+                        scene.remove(b);
+                        bullets.splice(bIdx, 1);
+                    }
+                });
+
+                // Simular peligro: Si un enemigo se acerca demasiado, pierdes
+                enemies.forEach(e => {
+                    if(e.position.distanceTo(camera.position) < 1.5) {
+                        gameOver(false);
+                    }
+                });
+            }
+
+            prevTime = time;
+            renderer.render(scene, camera);
+        }
+
+        function updateHUD() {
+            document.getElementById('count').innerText = enemies.length;
+        }
+
+        function checkWin() {
+            if (enemies.length === 0) gameOver(true);
+        }
+
+        function gameOver(win) {
+            gameActive = false;
+            controls.unlock();
+            document.getElementById(win ? 'screen-win' : 'screen-lose').classList.remove('hidden');
+        }
+
+        window.startGame = () => {
+            document.getElementById('screen-start').classList.add('hidden');
+            controls.lock();
+            gameActive = true;
+        };
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
