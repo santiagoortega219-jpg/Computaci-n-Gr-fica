@@ -1,0 +1,174 @@
+"use strict";
+
+var Cube = function(x = 0, y = 0, z = 0, color = 0xffffff, blockNumber = 0, attachments = {}) {
+  var cubeGeometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
+
+  var cubeMaterial = new THREE.MeshPhongMaterial({
+    color: color,
+    shading: THREE.FlatShading,
+    polygonOffset: true,
+    polygonOffsetFactor: 1,
+    polygonOffsetUnits: 1,
+    wireframe: false
+  });
+
+  var cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+  var cubeOutlineGeometry = new THREE.EdgesGeometry(cubeMesh.geometry);
+
+  var cubeOutlineMaterial = new THREE.LineBasicMaterial({
+    color: 0x000000,
+    linewidth: 1
+  });
+
+  var cubeOutlineLineSegments = new THREE.LineSegments(
+    cubeOutlineGeometry,
+    cubeOutlineMaterial
+  );
+
+  this.color = color;
+  this.cube = cubeMesh;
+  this.cubeOutline = cubeOutlineLineSegments;
+  this.x = x;
+  this.y = y;
+  this.z = z;
+  this.blockNumber = blockNumber;
+
+  this.attachments = attachments;
+
+  if (this.attachments.xPos == undefined) {
+    this.attachments.xPos = false;
+  }
+
+  if (this.attachments.xNeg == undefined) {
+    this.attachments.xNeg = false;
+  }
+
+  if (this.attachments.yPos == undefined) {
+    this.attachments.yPos = false;
+  }
+
+  if (this.attachments.yNeg == undefined) {
+    this.attachments.yNeg = false;
+  }
+
+  if (this.attachments.zPos == undefined) {
+    this.attachments.zPos = false;
+  }
+
+  if (this.attachments.zNeg == undefined) {
+    this.attachments.zNeg = false;
+  }
+
+  this.id = 0;
+
+  this.updatePosition();
+};
+
+Cube.prototype = {
+  constructor: Cube,
+
+  getCoordinates: function() {
+    return { x: this.x, y: this.y, z: this.z };
+  },
+
+  getX: function() {
+    return this.x;
+  },
+
+  getY: function() {
+    return this.y;
+  },
+
+  getZ: function() {
+    return this.z;
+  },
+
+  setCoordinates: function(x = 0, y = 0, z = 0) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.updatePosition();
+  },
+
+  setX: function(x = 0) {
+    this.x = x;
+    this.updatePosition();
+  },
+
+  setY: function(y = 0) {
+    this.y = y;
+    this.updatePosition();
+  },
+
+  setZ: function(z = 0) {
+    this.z = z;
+    this.updatePosition();
+  },
+
+  addX: function(xOffset = 0) {
+    this.x += xOffset;
+    this.updatePosition();
+  },
+
+  addY: function(yOffset = 0) {
+    this.y += yOffset;
+    this.updatePosition();
+  },
+
+  addZ: function(zOffset = 0) {
+    this.z += zOffset;
+    this.updatePosition();
+  },
+
+  getId: function() {
+    return this.id;
+  },
+
+  setId: function(id = 0) {
+    this.id = id;
+  },
+
+  updatePosition: function() {
+    var cubeOffset = CUBE_SIZE / 2;
+    var xOffset = ((BOARD_SIZE / 2) * CUBE_SIZE) - cubeOffset;
+    var zOffset = xOffset;
+    var yOffset = cubeOffset;
+
+    var newX = (this.x * CUBE_SIZE) - xOffset;
+    var newZ = (this.z * CUBE_SIZE) - zOffset;
+    var newY = (this.y * CUBE_SIZE) + yOffset;
+
+    this.cube.position.set(newX, newY, newZ);
+    this.cubeOutline.position.set(newX, newY, newZ);
+  },
+
+  updateTexture: function() {
+    if (this.parent.ADD_CUBE_TEXTURE && this.parent.cubeTexture && this.blockNumber > 0) {
+      this.cube.material = new THREE.MeshPhongMaterial({
+        map: this.parent.cubeTexture,
+        shading: THREE.FlatShading,
+        polygonOffset: true,
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: 1,
+        wireframe: false
+      });
+    }
+  },
+
+  resetTexture: function() {
+    this.cube.material = new THREE.MeshPhongMaterial({
+      color: this.color,
+      shading: THREE.FlatShading,
+      polygonOffset: true,
+      polygonOffsetFactor: 1,
+      polygonOffsetUnits: 1,
+      wireframe: false
+    });
+  },
+
+  addToScene: function(scene) {
+    scene.add(this.cube);
+    scene.add(this.cubeOutline);
+  }
+};

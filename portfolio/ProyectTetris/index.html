@@ -1,0 +1,114 @@
+<html>
+  <head>
+    <title>Proyecto - Tetris</title>
+    <link rel="stylesheet" type="text/css" href="css/default.css">
+  </head>
+
+  <body>
+    <div id="ui">
+      <h1>Tetris</h1>
+
+      <div id="game-info" class="hidden">
+        <h2 id="level-label">Nivel 1</h2>
+        <h3 id="points-label">Puntos: 0</h3>
+
+        <button id="back-menu-button" class="button" type="button" onclick="game.backToMenu();">
+          Volver al menú
+        </button>
+      </div>
+
+      <div id="overlay" class="hidden">
+        <div id="overlay-start-game" class="hidden">
+          <h1>Juego Nuevo</h1>
+        </div>
+
+        <div id="overlay-paused" class="hidden">
+          <h1>Pausado</h1>
+        </div>
+
+        <div id="overlay-game-over" class="hidden">
+          <h1>Fin del Juego</h1>
+        </div>
+
+        <div id="overlay-board-selector" class="hidden">
+          <p>Seleccionar tipo de tablero:</p>
+
+          <div class="style-select">
+            <select id="main-board-select" onchange="game.setBoard(Number(this.value));">
+              <option value="0">Predeterminado</option>
+              <option value="1">Cruzado</option>
+              <option value="2">Rayado</option>
+            </select>
+          </div>
+
+          <button id="overlay-play-button" type="button" onclick="game.startGame();">
+            Jugar
+          </button>
+
+          <button id="overlay-config-button" class="button" type="button" onclick="game.showConfigScreen();">
+            Configuraciones
+          </button>
+        </div>
+      </div>
+
+      <div id="config-screen" class="hidden">
+        <div class="config-screen-card">
+          <h1>Configuraciones</h1>
+
+          <div class="config-panel">
+            <label class="config-label">Volumen</label>
+
+            <input
+              id="volume-slider"
+              class="volume-slider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.5"
+              oninput="game.setVolume(Number(this.value));"
+            >
+
+            <label class="config-label">Sensibilidad</label>
+
+            <input
+              id="sensitivity-slider"
+              class="volume-slider"
+              type="range"
+              min="0.5"
+              max="3"
+              step="0.1"
+              value="1"
+              oninput="game.setSensitivity(Number(this.value));"
+            >
+
+            <button id="open-controls-button" class="button" type="button">
+              Controles
+            </button>
+
+            <button class="button" type="button" onclick="game.showStartGameMenu();">
+              Volver
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/three.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/board.js"></script>
+    <script src="js/block.js"></script>
+    <script src="js/cube.js"></script>
+    <script src="js/boards.js"></script>
+    <script src="js/blocks.js"></script>
+
+    <script>
+      "use strict";
+
+      var game = new Game();
+      game.init();
+      game.run();
+    </script>
+  </body>
+</html>
